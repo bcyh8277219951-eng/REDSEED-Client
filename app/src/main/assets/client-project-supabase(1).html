@@ -1,0 +1,1693 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="night">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#b91c1c">
+    <title>REDSEED Client Project Portal</title>
+    <!-- daisyUI 5 + Tailwind CSS 4 (CDN setup) -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        :root {
+            --background:#fff7f7; --card:rgba(255,255,255,.94); --card-light:#fffafa;
+            --border:#f1d5d5; --text:#2b1d1d; --muted:#7c6464;
+            --blue:#b91c1c; --purple:#dc2626; --green:#15803d; --red:#b91c1c; --yellow:#d4a017;
+        }
+        * { box-sizing:border-box; }
+        html { scroll-behavior:smooth; }
+        body {
+            margin:0; min-height:100vh; font-family:Arial,Helvetica,sans-serif; color:var(--text);
+            background:
+              radial-gradient(circle at top left,rgba(185,28,28,.12),transparent 35%),
+              radial-gradient(circle at top right,rgba(212,160,23,.10),transparent 35%),
+              var(--background);
+            padding-top:env(safe-area-inset-top); padding-bottom:env(safe-area-inset-bottom);
+            overflow-x:hidden;
+        }
+        button { font-family:inherit; cursor:pointer; }
+        .page-container { width:100%; max-width:900px; margin:0 auto; padding:16px 14px 32px; }
+        .glass-card {
+            background:var(--card); border:1px solid var(--border); border-radius:24px;
+            box-shadow:0 18px 45px rgba(127,29,29,.10); backdrop-filter:blur(18px);
+        }
+        .hero-section { padding:22px; }
+        .hero-header { display:flex; align-items:flex-start; gap:14px; }
+        .project-icon {
+            width:60px; height:60px; flex-shrink:0; border-radius:18px; display:flex;
+            align-items:center; justify-content:center; font-size:27px;
+            background:linear-gradient(135deg,var(--blue),var(--purple));
+            box-shadow:0 12px 30px rgba(185,28,28,.22);
+        }
+        .small-title { margin:0 0 6px; color:#b91c1c; font-size:11px; letter-spacing:.22em; text-transform:uppercase; }
+        .project-title { margin:0; font-size:28px; line-height:1.2; }
+        .project-description { margin:8px 0 0; color:var(--muted); font-size:14px; line-height:1.5; }
+        .project-information { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-top:18px; }
+        .status-badge { padding:8px 12px; border-radius:12px; border:1px solid var(--border); background:var(--card-light); font-size:13px; font-weight:bold; }
+        .project-id { color:#8f7272; font-size:12px; font-family:monospace; }
+        .logout-button {
+            padding:8px 13px; color:#b91c1c; font-size:12px; font-weight:bold; border-radius:11px;
+            border:1px solid rgba(185,28,28,.22); background:rgba(185,28,28,.06);
+        }
+        .sync-message {
+            display:none; margin-top:14px; padding:12px; color:#8a6500; font-size:12px;
+            line-height:1.5; border-radius:14px; border:1px solid rgba(212,160,23,.28);
+            background:rgba(212,160,23,.08);
+        }
+        .content-area { padding-top:14px; }
+        .information-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+        .information-card { padding:16px; border:1px solid var(--border); border-radius:18px; background:var(--card-light); }
+        .information-label { color:#8f7272; font-size:10px; letter-spacing:.12em; text-transform:uppercase; }
+        .information-value { margin-top:10px; font-size:26px; font-weight:bold; }
+        .blue-text { color:#b91c1c; } .green-text { color:var(--green); } .purple-text { color:#c084fc; }
+        .progress-track { width:100%; height:9px; margin-top:12px; overflow:hidden; border-radius:999px; background:#f3dfdf; }
+        .progress-bar { width:0; height:100%; border-radius:999px; background:linear-gradient(90deg,var(--blue),var(--purple)); transition:width .3s ease; }
+        .section-card { margin-top:14px; padding:18px; }
+        .section-header { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+        .section-title { margin:0; font-size:20px; }
+        .section-description { margin-top:5px; color:var(--muted); font-size:13px; }
+        .button { padding:10px 13px; color:var(--text); border-radius:12px; border:1px solid var(--border); background:#fff7f7; }
+        .danger-button { color:#b91c1c; border-color:rgba(251,113,133,.24); background:rgba(251,113,133,.08); }
+        .primary-button { color:#ffffff; border-color:#b91c1c; background:#b91c1c; }
+        .button-toolbar { display:flex; gap:9px; flex-wrap:wrap; margin-top:14px; }
+        .task-list,.follow-up-list { display:grid; gap:10px; margin-top:14px; }
+        .file-list {
+display: grid;
+gap: 10px;
+margin-top: 14px;
+}
+
+.file-row {
+width: 100%;
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 12px;
+padding: 14px;
+color: var(--text);
+text-align: left;
+border-radius: 16px;
+border: 1px solid var(--border);
+background:#fffdfd;
+}
+
+.file-row:active {
+background:rgba(185,28,28,.08);
+border-color:rgba(185,28,28,.30);
+}
+
+.file-information {
+min-width: 0;
+flex: 1;
+}
+
+.file-name {
+overflow: hidden;
+color: var(--text);
+font-size: 14px;
+font-weight: bold;
+text-overflow: ellipsis;
+white-space: nowrap;
+}
+
+.file-details {
+margin-top: 5px;
+color: #64748b;
+font-size: 11px;
+}
+
+.file-open-text {
+margin-top: 6px;
+color: #b91c1c;
+font-size: 11px;
+}
+
+.file-arrow {
+color: #b91c1c;
+font-size: 20px;
+flex-shrink: 0;
+}
+        .task-row { padding:14px; border-radius:16px; border:1px solid var(--border); background:rgba(255,255,255,.025); }
+        .task-name { font-size:15px; font-weight:bold; line-height:1.4; }
+        .task-description { margin-top:5px; color:#8f7272; font-size:12px; }
+        .task-actions { display:flex; gap:8px; margin-top:13px; }
+        .accept-button,.reject-button { flex:1; padding:10px; border-radius:11px; font-weight:bold; border:1px solid; }
+        .accept-button { color:#6ee7b7; border-color:rgba(16,185,129,.25); background:rgba(16,185,129,.09); }
+        .reject-button { color:#b91c1c; border-color:rgba(244,63,94,.24); background:rgba(244,63,94,.08); }
+        .task-row.accepted .accept-button { color:white; background:#059669; }
+        .task-row.rejected .reject-button { color:white; background:#e11d48; }
+        .follow-up-message { padding:14px; white-space:pre-wrap; border-radius:15px; border:1px solid rgba(185,28,28,.18); background:rgba(185,28,28,.05); }
+        .message-details { margin-top:8px; color:#8f7272; font-size:11px; }
+        .empty-message { padding:24px 8px; color:#8f7272; text-align:center; }
+        .floating-button {
+            position:fixed; right:18px; bottom:calc(18px + env(safe-area-inset-bottom));
+            width:52px; height:52px; z-index:100; color:white; font-size:22px; border:none;
+            border-radius:50%; background:linear-gradient(135deg,var(--blue),var(--purple));
+            box-shadow:0 12px 28px rgba(185,28,28,.28);
+        }
+        .project-navigator {
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 14px;
+margin-top: 18px;
+padding: 12px;
+border: 1px solid var(--border);
+border-radius: 18px;
+background:#fffafa;
+}
+
+.project-navigation-button {
+width: 44px;
+height: 44px;
+flex-shrink: 0;
+color: white;
+font-size: 22px;
+font-weight: bold;
+border:1px solid rgba(185,28,28,.30);
+border-radius: 50%;
+background:rgba(185,28,28,.08);
+box-shadow:0 8px 20px rgba(185,28,28,.14);
+transition:
+    transform .2s ease,
+    background .2s ease,
+    opacity .2s ease;
+}
+
+.project-navigation-button:active {
+transform: scale(.92);
+background:rgba(185,28,28,.18);
+}
+
+.project-navigation-button:disabled {
+opacity: .3;
+cursor: not-allowed;
+}
+
+.project-navigation-information {
+min-width: 0;
+flex: 1;
+text-align: center;
+}
+
+.project-navigation-count {
+color:#2b1d1d;
+font-size: 14px;
+font-weight: bold;
+}
+
+.project-navigation-name {
+overflow: hidden;
+margin-top: 4px;
+color: var(--muted);
+font-size: 12px;
+text-overflow: ellipsis;
+white-space: nowrap;
+}
+        .hidden { display:none; }
+        @media (min-width:700px) {
+            .page-container { padding-left:24px; padding-right:24px; }
+            .hero-section { padding:30px; }
+            .information-grid { grid-template-columns:repeat(4,1fr); }
+        }
+
+         .projectNavigatorBottom{
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        gap:20px;
+
+        margin-top:30px;
+        margin-bottom:20px;
+        }
+
+        .navigationCenter{
+        text-align:center;
+        min-width:160px;
+        }
+
+        #projectNavigationCount{
+        color:white;
+        font-size:15px;
+        font-weight:bold;
+        }
+
+        #projectNavigationName{
+        margin-top:5px;
+        color:#8f7272;
+        font-size:13px;
+        }
+
+        .navigationCircle{
+
+        width:54px;
+        height:54px;
+
+        border:none;
+        border-radius:50%;
+
+        font-size:24px;
+
+        color:white;
+
+        background:linear-gradient(
+        135deg,
+        #b91c1c,
+        #d4a017
+        );
+
+        box-shadow:0 8px 25px
+        rgba(185,28,28,.28);
+
+        transition:.25s;
+        }
+
+        .navigationCircle:hover{
+
+        transform:scale(1.08);
+
+        cursor:pointer;
+        }
+
+        .navigationCircle:active{
+
+        transform:scale(.90);
+        }
+
+        .navigationCircle:disabled{
+
+        opacity:.35;
+
+        cursor:not-allowed;
+        }
+
+        /* daisyUI integration polish */
+        body { background-color: var(--color-base-300); }
+        .page-container { position:relative; }
+        .glass-card { overflow:hidden; }
+        .information-grid { overflow:visible; }
+        .information-card.stat { min-width:0; box-shadow:none; }
+        .information-label.stat-title { opacity:.7; }
+        .information-value.stat-value { font-size:clamp(1.55rem,4vw,2rem); }
+        .section-card.card { display:block; }
+        .button.btn, .logout-button.btn { height:auto; min-height:2.25rem; }
+        .task-row.card { display:block; }
+        .accept-button.btn, .reject-button.btn { min-height:2.5rem; }
+        .task-row.accepted { border-color:color-mix(in oklab,var(--color-success) 45%,transparent); }
+        .task-row.rejected { border-color:color-mix(in oklab,var(--color-error) 45%,transparent); }
+        .task-row.accepted .accept-button { color:var(--color-success-content); background:var(--color-success); }
+        .task-row.rejected .reject-button { color:var(--color-error-content); background:var(--color-error); }
+        .follow-up-message.alert { display:block; color:var(--color-base-content); }
+        .file-row.btn { width:100%; padding:1rem; border:1px solid color-mix(in oklab,var(--color-base-content) 10%,transparent); background:color-mix(in oklab,var(--color-base-200) 78%,transparent); }
+        .file-row.btn:hover { border-color:color-mix(in oklab,var(--color-primary) 38%,transparent); background:color-mix(in oklab,var(--color-primary) 10%,var(--color-base-200)); }
+        .navigationCircle.btn { border:none; }
+        .floating-button.btn { width:3.5rem; height:3.5rem; }
+        @media (max-width:699px) {
+            .hero-header { align-items:center; }
+            .project-title { font-size:1.55rem; }
+            .information-grid.stats { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); }
+        }
+    </style>
+
+    <style>
+        /* =========================================================
+           REDSEED SHARED DAISYUI THEME
+           Used by both the web portal and Android/mobile portal.
+           ========================================================= */
+        :root {
+            --rs-bg: #070913;
+            --rs-panel: #101522;
+            --rs-card: #151b2b;
+            --rs-card-soft: #1b2235;
+            --rs-border: rgba(255,255,255,.10);
+            --rs-text: #f8fafc;
+            --rs-muted: #94a3b8;
+            --rs-primary: #6366f1;
+            --rs-secondary: #8b5cf6;
+            --rs-success: #22c55e;
+            --rs-error: #ef4444;
+            --rs-warning: #f59e0b;
+        }
+
+        html,
+        body {
+            background:
+                radial-gradient(circle at top left, rgba(99,102,241,.18), transparent 34%),
+                radial-gradient(circle at top right, rgba(139,92,246,.14), transparent 32%),
+                var(--rs-bg) !important;
+            color: var(--rs-text) !important;
+        }
+
+        body {
+            min-height: 100vh;
+        }
+
+        .glass-card,
+        .card,
+        .information-card,
+        .stat {
+            background: rgba(21,27,43,.88) !important;
+            border-color: var(--rs-border) !important;
+            color: var(--rs-text) !important;
+            box-shadow: 0 18px 45px rgba(0,0,0,.28) !important;
+            backdrop-filter: blur(18px);
+        }
+
+        .project-icon,
+        .bg-primary,
+        .btn-primary,
+        .navigationCircle,
+        .floating-button {
+            background: linear-gradient(135deg, var(--rs-primary), var(--rs-secondary)) !important;
+            color: #fff !important;
+            border-color: transparent !important;
+        }
+
+        .text-primary,
+        .blue-text {
+            color: #818cf8 !important;
+        }
+
+        .text-secondary,
+        .purple-text {
+            color: #c084fc !important;
+        }
+
+        .text-success,
+        .green-text {
+            color: #4ade80 !important;
+        }
+
+        .text-error {
+            color: #f87171 !important;
+        }
+
+        .text-base-content,
+        .text-white,
+        .text-gray-100,
+        .text-gray-200,
+        .text-gray-300 {
+            color: var(--rs-text) !important;
+        }
+
+        .text-gray-400,
+        .text-gray-500,
+        .section-description,
+        .project-description,
+        .information-label,
+        .stat-title,
+        .project-id {
+            color: var(--rs-muted) !important;
+        }
+
+        .status-badge,
+        .badge {
+            background: rgba(99,102,241,.12) !important;
+            color: #a5b4fc !important;
+            border-color: rgba(129,140,248,.32) !important;
+        }
+
+        .button,
+        .btn-ghost,
+        .logout-button {
+            background: rgba(255,255,255,.05) !important;
+            color: var(--rs-text) !important;
+            border-color: var(--rs-border) !important;
+        }
+
+        .button:hover,
+        .btn-ghost:hover {
+            background: rgba(99,102,241,.13) !important;
+            border-color: rgba(129,140,248,.34) !important;
+        }
+
+        .progress,
+        .progress-track {
+            background: rgba(255,255,255,.08) !important;
+        }
+
+        .progress::-webkit-progress-value,
+        .progress-bar {
+            background: linear-gradient(90deg, var(--rs-primary), var(--rs-secondary)) !important;
+        }
+
+        .task-row,
+        .file-row,
+        .follow-up-message {
+            background: rgba(255,255,255,.035) !important;
+            border-color: var(--rs-border) !important;
+            color: var(--rs-text) !important;
+        }
+
+        input,
+        textarea,
+        select {
+            background: #0d1220 !important;
+            color: var(--rs-text) !important;
+            border-color: var(--rs-border) !important;
+        }
+
+        ::-webkit-scrollbar {
+            width: 9px;
+            height: 9px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--rs-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #252d42;
+            border-radius: 999px;
+            border: 2px solid var(--rs-bg);
+        }
+    </style>
+
+</head>
+<body class="min-h-screen bg-base-300 text-base-content">
+<main class="page-container mx-auto max-w-5xl">
+    <section class="glass-card hero-section card border border-base-content/10 bg-base-100/80 shadow-2xl backdrop-blur-xl">
+        <div class="hero-header">
+            <div class="project-icon avatar placeholder"><div class="rounded-2xl bg-gradient-to-br from-primary to-secondary text-primary-content"><span>◆</span></div></div>
+            <div>
+                <h1 id="projectName" class="project-title">Loading...</h1>
+                <p class="project-description">Track project tasks, progress, follow-up messages and final valuation.</p>
+            </div>
+        </div>
+
+        <div class="project-information">
+            <span id="projectStatus" class="status-badge badge badge-primary badge-outline">New Project</span>
+            <span id="projectIdText" class="project-id">Loading Project...</span>
+            <button class="logout-button btn btn-error btn-outline btn-sm" type="button" onclick="logoutClient()">Logout</button>
+        </div>
+
+
+        <div id="syncMessage" class="sync-message"></div>
+    </section>
+
+    <div class="content-area">
+        <section class="information-grid stats stats-vertical lg:stats-horizontal w-full bg-transparent shadow-none">
+            <div class="information-card stat bg-base-100/70">
+                <div class="information-label stat-title">Project Progress</div>
+                <div id="progressText" class="information-value blue-text stat-value text-primary">0%</div>
+                <progress id="progressBarElement" class="progress progress-primary w-full mt-3" value="0" max="100"></progress><div class="progress-track hidden"><div id="progressBar" class="progress-bar"></div></div>
+            </div>
+
+            <div id="valuationCard" class="information-card stat bg-base-100/70 hidden">
+                <div class="information-label stat-title">Final Valuation</div>
+                <div id="projectValuation" class="information-value green-text stat-value text-success">RM 0.00</div>
+            </div>
+
+            <div class="information-card stat bg-base-100/70">
+                <div class="information-label stat-title">Client Access</div>
+                <div class="information-value green-text stat-value text-success">Active</div>
+            </div>
+
+            <div class="information-card stat bg-base-100/70">
+                <div class="information-label stat-title">Tasks</div>
+                <div id="taskCounter" class="information-value purple-text stat-value text-secondary">0 / 0</div>
+            </div>
+
+        </section>
+
+        <section class="glass-card section-card card border border-base-content/10 bg-base-100/75 shadow-xl">
+            <div class="section-header">
+                <h2 class="section-title">Follow-up Messages</h2>
+                <button class="button btn btn-ghost btn-sm" type="button" onclick="refreshProject()">Refresh</button>
+            </div>
+            <div id="followUpList" class="follow-up-list"></div>
+        </section>
+
+        <section class="glass-card section-card card border border-base-content/10 bg-base-100/75 shadow-xl">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title">
+                        Project Files
+                    </h2>
+
+                    <div class="section-description">
+                        Files uploaded by the administrator.
+                    </div>
+                </div>
+
+                <button
+                        class="button btn btn-ghost btn-sm"
+                        type="button"
+                        onclick="renderClientFiles(currentProject?.files || [])"
+                >
+                    Refresh
+                </button>
+            </div>
+
+            <div id="clientFileList" class="file-list">
+                <div class="empty-message">
+                    No files uploaded yet.
+                </div>
+            </div>
+        </section>
+
+        <section id="taskSection" class="glass-card section-card card border border-base-content/10 bg-base-100/75 shadow-xl">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title">Project Tasks</h2>
+                    <div class="section-description">Accept or reject each assigned task.</div>
+                </div>
+            </div>
+
+            <div class="button-toolbar">
+                <button class="button danger-button btn btn-error btn-outline btn-sm" type="button" onclick="resetTasks()">Reset Responses</button>
+                <button class="button primary-button btn btn-primary btn-sm" type="button" onclick="syncWithServer()">Sync Server</button>
+            </div>
+
+            <div id="clientTaskList" class="task-list"></div>
+        </section>
+
+        <div id="projectNavigator" class="projectNavigatorBottom hidden">
+
+            <button
+                    id="previousProjectButton"
+                    class="navigationCircle btn btn-circle btn-primary"
+                    onclick="showPreviousProject()">
+                ⬅
+            </button>
+
+            <div class="navigationCenter">
+
+                <div id="projectNavigationCount">
+                    Project 1 of 1
+                </div>
+
+                <div id="projectNavigationName">
+                    Current Project
+                </div>
+
+            </div>
+
+            <button
+                    id="nextProjectButton"
+                    class="navigationCircle btn btn-circle btn-primary"
+                    onclick="showNextProject()">
+                ➡
+            </button>
+
+        </div>
+
+    </div>
+</main>
+
+<button class="floating-button btn btn-circle btn-primary shadow-xl" type="button" onclick="scrollToTasks()" aria-label="Scroll to project tasks">↓</button>
+
+<script type="module">
+    "use strict";
+
+    import { supabase } from "./supabase-config.js";
+
+
+    const SAVED_EMAIL_KEY = "nexus_logged_in_email";
+    const PROJECT_CACHE_KEY = "nexus_logged_in_project";
+    const SUPABASE_PROJECT_ID_KEY = "nexus_supabase_project_id";
+
+    let projects = [];
+    let currentProjectIndex = 0;
+    let currentProject = null;
+    let unsubscribeProjectListener = null;
+    let isSaving = false;
+    let projectPollingTimer = null;
+
+    function getLoggedInClientEmail() {
+const urlEmail =
+    new URLSearchParams(window.location.search)
+        .get("email");
+
+const resolvedEmail = String(
+    urlEmail ||
+    localStorage.getItem(SAVED_EMAIL_KEY) ||
+    sessionStorage.getItem(SAVED_EMAIL_KEY) ||
+    localStorage.getItem("currentLoggedInEmail") ||
+    sessionStorage.getItem("currentLoggedInEmail") ||
+    localStorage.getItem("currentUserEmail") ||
+    sessionStorage.getItem("currentUserEmail") ||
+    ""
+)
+    .trim()
+    .toLowerCase();
+
+if (resolvedEmail) {
+    localStorage.setItem(
+        SAVED_EMAIL_KEY,
+        resolvedEmail
+    );
+
+    sessionStorage.setItem(
+        SAVED_EMAIL_KEY,
+        resolvedEmail
+    );
+}
+
+return resolvedEmail;
+}
+
+function updateProjectNavigator() {
+const navigator =
+    document.getElementById("projectNavigator");
+
+const countText =
+    document.getElementById(
+        "projectNavigationCount"
+    );
+
+const projectName =
+    document.getElementById(
+        "projectNavigationName"
+    );
+
+const previousButton =
+    document.getElementById(
+        "previousProjectButton"
+    );
+
+const nextButton =
+    document.getElementById(
+        "nextProjectButton"
+    );
+
+if (
+    !navigator ||
+    !countText ||
+    !projectName ||
+    !previousButton ||
+    !nextButton
+) {
+    return;
+}
+
+if (projects.length === 0) {
+    navigator.classList.add("hidden");
+    return;
+}
+
+navigator.classList.remove("hidden");
+
+countText.textContent =
+    `Project ${currentProjectIndex + 1} of ${projects.length}`;
+
+projectName.textContent =
+currentProject?.projectTitle ||
+currentProject?.projectName ||
+currentProject?.company ||
+currentProject?.name ||
+`Project ${currentProjectIndex + 1}`;
+
+const onlyOneProject =
+    projects.length <= 1;
+
+previousButton.disabled =
+    onlyOneProject;
+
+nextButton.disabled =
+    onlyOneProject;
+}
+
+function showPreviousProject() {
+if (projects.length <= 1) {
+    return;
+}
+
+currentProjectIndex--;
+
+if (currentProjectIndex < 0) {
+    currentProjectIndex =
+        projects.length - 1;
+}
+
+currentProject =
+    projects[currentProjectIndex];
+
+renderProject();
+}
+
+function showNextProject() {
+if (projects.length <= 1) {
+    return;
+}
+
+currentProjectIndex++;
+
+if (
+    currentProjectIndex >=
+    projects.length
+) {
+    currentProjectIndex = 0;
+}
+
+currentProject =
+    projects[currentProjectIndex];
+
+renderProject();
+}
+
+    function escapeHtml(value) {
+        return String(value ?? "").replace(/[&<>"']/g, character => ({
+            "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#039;"
+        }[character]));
+    }
+
+    function showAndroidToast(message) {
+        if (window.AndroidApp && typeof window.AndroidApp.showToast === "function") {
+            window.AndroidApp.showToast(message);
+        }
+    }
+
+    function showSyncMessage(message) {
+        const box = document.getElementById("syncMessage");
+        box.textContent = message;
+        box.style.display = "block";
+        clearTimeout(showSyncMessage.timer);
+        showSyncMessage.timer = setTimeout(() => {
+            box.style.display = "none";
+        }, 3500);
+    }
+
+    function convertSupabaseProject(row) {
+        const stored =
+            row && row.data && typeof row.data === "object"
+                ? row.data
+                : {};
+
+        return {
+            ...stored,
+            supabaseId: row.id,
+            id: stored.id || row.project_id || row.id,
+            name: stored.name || stored.clientName || row.client_name || "Unnamed Client",
+            email: String(
+                stored.email ||
+                stored.clientEmail ||
+                row.client_email ||
+                ""
+            ).trim().toLowerCase(),
+            phone: stored.phone || stored.clientPhone || row.client_phone || "",
+            company: stored.company || row.company || "",
+            projectTitle:
+                stored.projectTitle ||
+                stored.projectName ||
+                row.project_title ||
+                row.project_name ||
+                row.title ||
+                "",
+            dueDate: stored.dueDate || row.due_date || "",
+            dueTime: stored.dueTime || row.due_time || "",
+            status: stored.status || row.status || "New Project",
+            progress: Number(stored.progress ?? row.progress ?? 0),
+            valuation: Number(stored.valuation ?? row.valuation ?? 0),
+            finalValuation: Number(
+                stored.finalValuation ??
+                row.final_valuation ??
+                stored.valuation ??
+                row.valuation ??
+                0
+            ),
+            ratePerHour: Number(stored.ratePerHour ?? row.rate_per_hour ?? 0),
+            hoursUsed: Number(stored.hoursUsed ?? stored.hourUsed ?? row.hours_used ?? 0),
+            tasks: Array.isArray(stored.tasks)
+                ? stored.tasks
+                : Array.isArray(row.tasks) ? row.tasks : [],
+            notes: Array.isArray(stored.notes)
+                ? stored.notes
+                : Array.isArray(row.notes) ? row.notes : [],
+            followUps: Array.isArray(stored.followUps)
+                ? stored.followUps
+                : Array.isArray(row.follow_ups) ? row.follow_ups : [],
+            files: Array.isArray(stored.files)
+                ? stored.files
+                : Array.isArray(row.files) ? row.files : [],
+            paymentReceived: Boolean(
+                stored.paymentReceived ?? row.payment_received
+            ),
+            paymentStatus:
+                stored.paymentStatus ||
+                row.payment_status ||
+                ((stored.paymentReceived ?? row.payment_received)
+                    ? "Received"
+                    : "Pending"),
+            paymentReceivedAt:
+                stored.paymentReceivedAt ||
+                row.payment_received_at ||
+                null,
+            projectDescription:
+                stored.projectDescription ||
+                stored.description ||
+                row.project_description ||
+                row.description ||
+                "",
+            timerRunning: Boolean(
+                stored.timerRunning ?? row.timer_running
+            ),
+            workStartedAt:
+                stored.workStartedAt ||
+                row.work_started_at ||
+                null,
+            startTime: stored.startTime || row.start_time || null,
+            endTime: stored.endTime || row.end_time || null,
+            currentSessionStart:
+                stored.currentSessionStart ||
+                row.current_session_start ||
+                null,
+            accumulatedMilliseconds: Number(
+                stored.accumulatedMilliseconds ??
+                row.accumulated_milliseconds ??
+                0
+            ),
+            lastUpdatedBy:
+                stored.lastUpdatedBy ||
+                row.last_updated_by ||
+                "",
+            lastAction:
+                stored.lastAction ||
+                row.last_action ||
+                ""
+        };
+    }
+
+    function getValidTasks() {
+        return (currentProject?.tasks || []).filter(task =>
+            task && typeof task.text === "string" && task.text.trim() !== ""
+        );
+    }
+
+    function calculateProgress() {
+        const tasks = getValidTasks();
+        const accepted = tasks.filter(task => task.completed === true).length;
+        const progress = tasks.length ? Math.round((accepted / tasks.length) * 100) : 0;
+        return { tasks, accepted, progress };
+    }
+
+    function renderProject() {
+if (!currentProject) return;
+
+updateProjectNavigator();
+
+        const { tasks, accepted, progress } = calculateProgress();
+        currentProject.progress = progress;
+        currentProject.status =
+            progress === 100 && tasks.length > 0 ? "Completed" :
+            progress > 0 ? "In Progress" : "New Project";
+
+        document.getElementById("projectName").textContent =
+currentProject.projectTitle ||
+currentProject.projectName ||
+currentProject.company ||
+currentProject.name ||
+"Unnamed Project";
+
+        document.getElementById("projectIdText").textContent =
+            "Project ID: " + (currentProject.id || "NX-0000");
+
+        document.getElementById("projectStatus").textContent =
+            currentProject.status;
+
+        document.getElementById("progressText").textContent =
+            progress + "%";
+
+        document.getElementById("progressBar").style.width =
+            progress + "%";
+
+        document.getElementById("taskCounter").textContent =
+            accepted + " / " + tasks.length;
+
+        const valuationCard = document.getElementById("valuationCard");
+        const valuationText = document.getElementById("projectValuation");
+
+        if (currentProject.status === "Completed") {
+            valuationCard.classList.remove("hidden");
+            valuationText.textContent =
+                "RM " + Number(currentProject.finalValuation ?? currentProject.valuation ?? 0).toFixed(2);
+        } else {
+            valuationCard.classList.add("hidden");
+        }
+
+        renderTasks(tasks);
+        renderFollowUps(currentProject.followUps || []);
+        renderClientFiles(currentProject.files || []);
+    }
+
+    function renderTasks(tasks) {
+        const list = document.getElementById("clientTaskList");
+
+        if (!tasks.length) {
+            list.innerHTML = '<div class="empty-message">No tasks added yet.</div>';
+            return;
+        }
+
+        list.innerHTML = tasks.map((task, index) => {
+            const accepted = task.completed === true;
+            const rejected = task.rejected === true;
+            const rowClass = accepted ? "accepted" : rejected ? "rejected" : "";
+
+            return `
+              <div class="task-row ${rowClass}">
+                <div class="task-name">${escapeHtml(task.text)}</div>
+                <div class="task-description">
+                  ${accepted ? "Accepted" : rejected ? "Rejected" : "Please accept or reject this task."}
+                </div>
+                <div class="task-actions">
+                  <button class="accept-button" type="button" onclick="setTaskStatus(${index}, 'accepted')">Accept</button>
+                  <button class="reject-button" type="button" onclick="setTaskStatus(${index}, 'rejected')">Reject</button>
+                </div>
+              </div>
+            `;
+        }).join("");
+    }
+
+    function renderFollowUps(followUps) {
+        const list = document.getElementById("followUpList");
+
+        if (!Array.isArray(followUps) || followUps.length === 0) {
+            list.innerHTML = '<div class="empty-message">No follow-up messages yet.</div>';
+            return;
+        }
+
+        list.innerHTML = [...followUps].reverse().map(item => `
+          <div class="follow-up-message">
+            ${escapeHtml(item.message || item.text || "")}
+            <div class="message-details">
+              ${escapeHtml(item.from || "Admin")} • ${escapeHtml(item.date || "")}
+            </div>
+          </div>
+        `).join("");
+    }
+
+    function renderClientFiles(files) {
+const list =
+    document.getElementById("clientFileList");
+
+if (!list) {
+    return;
+}
+
+const validFiles =
+    Array.isArray(files)
+        ? files.filter(file =>
+            file &&
+            (
+                file.url ||
+                file.dataUrl
+            )
+        )
+        : [];
+
+if (validFiles.length === 0) {
+    list.innerHTML = `
+        <div class="empty-message">
+            No files uploaded yet.
+        </div>
+    `;
+
+    return;
+}
+
+list.innerHTML =
+    validFiles.map((file, index) => {
+        const name =
+            escapeHtml(
+                file.name ||
+                `Project file ${index + 1}`
+            );
+
+        const date =
+            escapeHtml(
+                file.date ||
+                file.uploadedAt ||
+                ""
+            );
+
+        const size =
+            formatClientFileSize(
+                Number(file.size || 0)
+            );
+
+        return `
+            <button
+                class="file-row"
+                type="button"
+                onclick="openClientFile(${index})"
+            >
+                <div class="file-information">
+                    <div class="file-name">
+                        ${name}
+                    </div>
+
+                    <div class="file-details">
+                        ${size}
+                        ${date ? ` • ${date}` : ""}
+                    </div>
+
+                    <div class="file-open-text">
+${
+    String(file.name || "")
+        .toLowerCase()
+        .match(/\.html?$/)
+        ? "Tap to open in browser"
+        : "Tap to open file"
+}
+</div>
+                </div>
+
+                <div class="file-arrow">
+                    ›
+                </div>
+            </button>
+        `;
+    }).join("");
+}
+
+async function openClientFile(fileIndex) {
+if (
+    !currentProject ||
+    !Array.isArray(currentProject.files) ||
+    !currentProject.files[fileIndex]
+) {
+    showAndroidToast("File not found.");
+    return;
+}
+
+const file =
+    currentProject.files[fileIndex];
+
+const fileUrl =
+    file.url ||
+    file.dataUrl ||
+    "";
+
+if (!fileUrl) {
+    showAndroidToast(
+        "This file does not have a valid URL."
+    );
+    return;
+}
+
+const fileName =
+    String(file.name || "")
+        .trim();
+
+const fileType =
+    String(file.type || "")
+        .toLowerCase();
+
+const isHtmlFile =
+    fileName.toLowerCase().endsWith(".html") ||
+    fileName.toLowerCase().endsWith(".htm") ||
+    fileType === "text/html";
+
+/*
+ * HTML files:
+ * fetch and render directly instead of downloading.
+ */
+if (isHtmlFile) {
+    try {
+        showAndroidToast(
+            "Opening HTML file..."
+        );
+
+        const response =
+            await fetch(fileUrl);
+
+        if (!response.ok) {
+            throw new Error(
+                `Unable to load HTML: ${response.status}`
+            );
+        }
+
+        let htmlContent =
+            await response.text();
+
+        /*
+         * Add a base URL so linked CSS, JS and images
+         * stored in the same Supabase folder can load.
+         */
+        const baseUrl =
+            fileUrl.substring(
+                0,
+                fileUrl.lastIndexOf("/") + 1
+            );
+
+        const baseElement =
+            `<base href="${escapeHtml(baseUrl)}">`;
+
+        if (
+            /<head[\s>]/i.test(htmlContent)
+        ) {
+            htmlContent =
+                htmlContent.replace(
+                    /<head([^>]*)>/i,
+                    `<head$1>${baseElement}`
+                );
+        } else {
+            htmlContent =
+                baseElement +
+                htmlContent;
+        }
+
+        const htmlBlob =
+            new Blob(
+                [htmlContent],
+                {
+                    type:
+                        "text/html;charset=utf-8"
+                }
+            );
+
+        const viewerUrl =
+            URL.createObjectURL(
+                htmlBlob
+            );
+
+        /*
+         * Android WebView:
+         * open in the same WebView.
+         * The phone Back button returns to the portal.
+         */
+        if (
+            window.AndroidApp
+        ) {
+            window.location.href =
+                viewerUrl;
+
+            return;
+        }
+
+        /*
+         * Desktop/mobile browser:
+         * open in a new browser tab.
+         */
+        const openedWindow =
+            window.open(
+                viewerUrl,
+                "_blank"
+            );
+
+        if (!openedWindow) {
+            window.location.href =
+                viewerUrl;
+        }
+
+        return;
+
+    } catch (error) {
+        console.error(
+            "Unable to display HTML file:",
+            error
+        );
+
+        alert(
+            "The HTML file could not be opened.\n\n" +
+            (
+                error?.message ||
+                "Please try again."
+            )
+        );
+
+        return;
+    }
+}
+
+/*
+ * Other files:
+ * PDFs, images, videos and audio open using
+ * Chrome or an appropriate application.
+ */
+if (
+    window.AndroidApp &&
+    typeof window.AndroidApp.openUrl ===
+        "function"
+) {
+    window.AndroidApp.openUrl(
+        fileUrl
+    );
+
+    return;
+}
+
+const openedWindow =
+    window.open(
+        fileUrl,
+        "_blank",
+        "noopener,noreferrer"
+    );
+
+if (!openedWindow) {
+    window.location.href =
+        fileUrl;
+}
+}
+function formatClientFileSize(bytes) {
+if (!bytes || bytes <= 0) {
+    return "Unknown size";
+}
+
+if (bytes < 1024) {
+    return `${bytes} B`;
+}
+
+if (bytes < 1024 * 1024) {
+    return `${(bytes / 1024).toFixed(1)} KB`;
+}
+
+return `${(
+    bytes /
+    (1024 * 1024)
+).toFixed(1)} MB`;
+}
+
+    async function saveProjectToSupabase(actionText) {
+        if (!currentProject || isSaving) return;
+
+        const projectId =
+            currentProject.supabaseId ||
+            localStorage.getItem(SUPABASE_PROJECT_ID_KEY);
+
+        if (!projectId) {
+            showSyncMessage(
+                "Project access information is missing. Please log in again."
+            );
+            return;
+        }
+
+        const { progress } = calculateProgress();
+
+        currentProject.progress = progress;
+        currentProject.status =
+            progress === 100 && getValidTasks().length > 0
+                ? "Completed"
+                : progress > 0
+                    ? "In Progress"
+                    : "New Project";
+
+        const updatedProjectData = {
+            ...currentProject,
+            supabaseId: undefined,
+            email: String(currentProject.email || "")
+                .trim()
+                .toLowerCase(),
+            tasks: Array.isArray(currentProject.tasks)
+                ? currentProject.tasks
+                : [],
+            notes: Array.isArray(currentProject.notes)
+                ? currentProject.notes
+                : [],
+            followUps: Array.isArray(currentProject.followUps)
+                ? currentProject.followUps
+                : [],
+            files: Array.isArray(currentProject.files)
+                ? currentProject.files
+                : [],
+            progress: Number(currentProject.progress || 0),
+            status: currentProject.status || "New Project",
+            lastUpdatedAt: new Date().toISOString(),
+            lastUpdatedBy: "Client",
+            lastAction:
+                actionText ||
+                "Client updated project"
+        };
+
+        delete updatedProjectData.supabaseId;
+
+        isSaving = true;
+
+        try {
+            const { error } = await supabase
+                .from("projects")
+                .update({
+                    client_email: updatedProjectData.email,
+                    project_id: String(
+                        updatedProjectData.id || projectId
+                    ),
+                    data: updatedProjectData,
+                    updated_at: new Date().toISOString()
+                })
+                .eq("id", projectId);
+
+            if (error) throw error;
+
+            localStorage.setItem(
+                PROJECT_CACHE_KEY,
+                JSON.stringify(currentProject)
+            );
+
+            showAndroidToast("Project updated");
+
+        } catch (error) {
+            console.error(
+                "Supabase update error:",
+                error
+            );
+
+            showSyncMessage(
+                error.message ||
+                "Unable to update Supabase."
+            );
+
+        } finally {
+            isSaving = false;
+        }
+    }
+
+    async function setTaskStatus(validTaskIndex, status) {
+        const validTasks = getValidTasks();
+        const selectedTask = validTasks[validTaskIndex];
+        if (!selectedTask) return;
+
+        const originalIndex = currentProject.tasks.indexOf(selectedTask);
+        if (originalIndex < 0) return;
+
+        currentProject.tasks[originalIndex] = {
+            ...currentProject.tasks[originalIndex],
+            completed: status === "accepted",
+            rejected: status === "rejected"
+        };
+
+        renderProject();
+        await saveProjectToSupabase(
+            status === "accepted"
+                ? "Client accepted task: " + selectedTask.text
+                : "Client rejected task: " + selectedTask.text
+        );
+    }
+
+    async function resetTasks() {
+        if (!currentProject) return;
+
+        currentProject.tasks = (currentProject.tasks || []).map(task => ({
+            ...task,
+            completed: null,
+            rejected: false
+        }));
+
+        renderProject();
+        await saveProjectToSupabase("Client reset all task responses");
+    }
+
+    async function loadProjectOnce() {
+const clientEmail =
+    getLoggedInClientEmail();
+
+if (!clientEmail) {
+    clearProjectDisplay(
+        "No logged-in client email was found. Please log in again from the mobile app."
+    );
+
+    return false;
+}
+
+return true;
+}
+
+
+function clearProjectDisplay(message) {
+document.getElementById("projectName").textContent =
+    "No Project Found";
+
+document.getElementById("projectIdText").textContent =
+    "No matching Supabase project";
+
+document.getElementById("projectStatus").textContent =
+    "Unavailable";
+
+document.getElementById("progressText").textContent =
+    "0%";
+
+document.getElementById("progressBar").style.width =
+    "0%";
+
+document.getElementById("taskCounter").textContent =
+    "0 / 0";
+
+document.getElementById("valuationCard")
+    .classList.add("hidden");
+
+document.getElementById("followUpList").innerHTML =
+    '<div class="empty-message">No follow-up messages yet.</div>';
+
+document.getElementById("clientTaskList").innerHTML =
+    '<div class="empty-message">No tasks added yet.</div>';
+
+document.getElementById("clientFileList").innerHTML =
+    '<div class="empty-message">No files uploaded yet.</div>';
+
+showSyncMessage(
+    message || "No project was found for this email."
+);
+}
+
+async function loadProjectsFromSupabase() {
+        const clientEmail = getLoggedInClientEmail();
+
+        if (!clientEmail) {
+            clearProjectDisplay(
+                "No client email was found."
+            );
+            return;
+        }
+
+        const previousProjectId =
+            currentProject?.supabaseId || null;
+
+        const { data, error } = await supabase
+            .from("projects")
+            .select(
+                "id, owner_admin_key, client_email, project_id, data, updated_at"
+            )
+            .eq("client_email", clientEmail)
+            .order("updated_at", {
+                ascending: false
+            });
+
+        if (error) throw error;
+
+        if (!data || data.length === 0) {
+            projects = [];
+            currentProject = null;
+            currentProjectIndex = 0;
+
+            const navigator =
+                document.getElementById(
+                    "projectNavigator"
+                );
+
+            if (navigator) {
+                navigator.classList.add("hidden");
+            }
+
+            clearProjectDisplay(
+                "No Supabase project is visible for " +
+                clientEmail +
+                ". Check that the admin project was uploaded and that the projects-table RLS policies were installed."
+            );
+
+            return;
+        }
+
+        projects =
+            data.map(convertSupabaseProject);
+
+        const previousIndex =
+            projects.findIndex(project =>
+                String(project.supabaseId) ===
+                String(previousProjectId)
+            );
+
+        if (previousIndex >= 0) {
+            currentProjectIndex =
+                previousIndex;
+        } else if (
+            currentProjectIndex >=
+            projects.length
+        ) {
+            currentProjectIndex = 0;
+        }
+
+        currentProject =
+            projects[currentProjectIndex];
+
+        if (currentProject?.supabaseId) {
+            localStorage.setItem(
+                SUPABASE_PROJECT_ID_KEY,
+                currentProject.supabaseId
+            );
+        }
+
+        localStorage.setItem(
+            PROJECT_CACHE_KEY,
+            JSON.stringify(currentProject)
+        );
+
+        renderProject();
+    }
+
+    async function startRealtimeListener() {
+        const clientEmail = getLoggedInClientEmail();
+        if (!clientEmail) {
+            showSyncMessage("No client email was found.");
+            return;
+        }
+
+        if (unsubscribeProjectListener) {
+            await unsubscribeProjectListener();
+            unsubscribeProjectListener = null;
+        }
+
+        await loadProjectsFromSupabase();
+
+        const channel = supabase
+            .channel("client-projects-" + clientEmail)
+            .on(
+                "postgres_changes",
+                {
+                    event: "*",
+                    schema: "public",
+                    table: "projects",
+                    filter: "client_email=eq." + clientEmail
+                },
+                async () => {
+                    try {
+                        await loadProjectsFromSupabase();
+                    } catch (error) {
+                        console.error("Realtime refresh failed:", error);
+                    }
+                }
+            )
+            .subscribe(status => {
+                if (status === "CHANNEL_ERROR" || status === "TIMED_OUT") {
+                    showSyncMessage("Realtime synchronization failed.");
+                }
+            });
+
+        unsubscribeProjectListener = async function() {
+            await supabase.removeChannel(channel);
+        };
+
+        /*
+         * Realtime is the primary sync method. This small polling fallback
+         * ensures admin updates still appear if a Realtime event is delayed.
+         */
+        clearInterval(projectPollingTimer);
+        projectPollingTimer = setInterval(async function() {
+            try {
+                await loadProjectsFromSupabase();
+            } catch (pollingError) {
+                console.warn(
+                    "Project polling refresh failed:",
+                    pollingError
+                );
+            }
+        }, 4000);
+    }
+
+    async function initializeApplication() {
+        try {
+            const { data: { session }, error } = await supabase.auth.getSession();
+            if (error) throw error;
+            if (!session?.user) {
+                throw new Error(
+                    "Your Supabase login session is missing. Please return to the login page and sign in again."
+                );
+            }
+
+            const authenticatedEmail = String(session.user.email || "").trim().toLowerCase();
+            const requestedEmail = getLoggedInClientEmail();
+
+            if (!authenticatedEmail || authenticatedEmail !== requestedEmail) {
+                throw new Error(
+                    "The signed-in Supabase account does not match this client portal email."
+                );
+            }
+
+            await loadProjectOnce();
+            await startRealtimeListener();
+            showSyncMessage("Supabase project loaded successfully.");
+        } catch (error) {
+            console.error("Project loading error:", error);
+            clearProjectDisplay(error.message || "Unable to load project.");
+        }
+    }
+
+    async function refreshProject() {
+try {
+    await loadProjectOnce();
+
+    await startRealtimeListener();
+
+    showSyncMessage(
+        "Projects refreshed from Supabase."
+    );
+} catch (error) {
+    showSyncMessage(
+        error.message ||
+        "Refresh failed."
+    );
+}
+}
+
+    async function syncWithServer() {
+        await refreshProject();
+    }
+
+    function scrollToTasks() {
+        document.getElementById("taskSection").scrollIntoView({ behavior:"smooth" });
+    }
+
+    async function logoutClient() {
+        clearInterval(projectPollingTimer);
+        projectPollingTimer = null;
+
+        if (unsubscribeProjectListener) {
+            unsubscribeProjectListener();
+            unsubscribeProjectListener = null;
+        }
+
+        try {
+            const { error } = await supabase.auth.signOut();
+            if (error) throw error;
+        } catch (error) {
+            console.warn("Supabase sign-out failed:", error);
+        }
+
+        localStorage.removeItem(SAVED_EMAIL_KEY);
+        localStorage.removeItem(PROJECT_CACHE_KEY);
+        localStorage.removeItem(SUPABASE_PROJECT_ID_KEY);
+        sessionStorage.removeItem(SAVED_EMAIL_KEY);
+        sessionStorage.removeItem(PROJECT_CACHE_KEY);
+
+        showAndroidToast("Logged out");
+        window.location.href = "login.html";
+    }
+
+    window.setTaskStatus = setTaskStatus;
+    window.showPreviousProject =
+showPreviousProject;
+
+window.showNextProject =
+showNextProject;
+    window.resetTasks = resetTasks;
+    window.refreshProject = refreshProject;
+    window.openClientFile =
+    openClientFile;
+    window.renderClientFiles =
+    renderClientFiles;
+    window.syncWithServer = syncWithServer;
+    window.scrollToTasks = scrollToTasks;
+    window.logoutClient = logoutClient;
+
+    window.addEventListener("beforeunload", function() {
+        clearInterval(projectPollingTimer);
+        projectPollingTimer = null;
+
+        if (unsubscribeProjectListener) {
+            unsubscribeProjectListener();
+            unsubscribeProjectListener = null;
+        }
+    });
+
+    initializeApplication();
+</script>
+</body>
+</html>

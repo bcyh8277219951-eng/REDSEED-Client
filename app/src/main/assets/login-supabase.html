@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    >
+
+    <meta
+            name="theme-color"
+            content="#05060f"
+    >
+
+    <title>REDSEED Client Login</title>
+
+    <style>
+
+        :root {
+            --background: #05060f;
+            --card: rgba(20, 24, 46, 0.78);
+            --border: rgba(255, 255, 255, 0.09);
+            --text: #f8fafc;
+            --muted: #94a3b8;
+            --blue: #3b82f6;
+            --purple: #a855f7;
+            --red: #fb7185;
+            --green: #34d399;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+
+            min-height: 100vh;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding:
+                calc(
+                    22px +
+                    env(safe-area-inset-top)
+                )
+                18px
+                calc(
+                    22px +
+                    env(safe-area-inset-bottom)
+                );
+
+            color: var(--text);
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            background:
+                radial-gradient(
+                    circle at top left,
+                    rgba(59, 130, 246, 0.30),
+                    transparent 35%
+                ),
+                radial-gradient(
+                    circle at bottom right,
+                    rgba(168, 85, 247, 0.25),
+                    transparent 35%
+                ),
+                var(--background);
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 420px;
+        }
+
+        .login-card {
+            padding: 28px 22px;
+
+            border:
+                1px solid
+                var(--border);
+
+            border-radius: 28px;
+
+            background:
+                var(--card);
+
+            box-shadow:
+                0 25px 70px
+                rgba(0, 0, 0, 0.40);
+
+            backdrop-filter:
+                blur(20px);
+        }
+
+        .logo {
+            width: 72px;
+            height: 72px;
+
+            margin:
+                0
+                auto
+                20px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 22px;
+
+            font-size: 30px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--blue),
+                    var(--purple)
+                );
+
+            box-shadow:
+                0 14px 35px
+                rgba(59, 130, 246, 0.32);
+        }
+
+        .small-title {
+            margin:
+                0
+                0
+                8px;
+
+            color: #60a5fa;
+
+            font-size: 11px;
+
+            text-align: center;
+
+            letter-spacing: 0.25em;
+
+            text-transform: uppercase;
+        }
+
+        h1 {
+            margin: 0;
+
+            text-align: center;
+
+            font-size: 29px;
+        }
+
+        .description {
+            margin:
+                10px
+                0
+                25px;
+
+            color: var(--muted);
+
+            font-size: 14px;
+
+            line-height: 1.6;
+
+            text-align: center;
+        }
+
+        label {
+            display: block;
+
+            margin-bottom: 8px;
+
+            color: #cbd5e1;
+
+            font-size: 13px;
+
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+
+            padding:
+                15px
+                16px;
+
+            color: var(--text);
+
+            font-size: 15px;
+
+            outline: none;
+
+            border:
+                1px solid
+                var(--border);
+
+            border-radius: 14px;
+
+            background:
+                rgba(255, 255, 255, 0.045);
+        }
+
+        input:focus {
+            border-color:
+                rgba(59, 130, 246, 0.75);
+
+            box-shadow:
+                0 0 0 4px
+                rgba(59, 130, 246, 0.10);
+        }
+
+        .password-label {
+    margin-top: 16px;
+}
+
+.password-container {
+    position: relative;
+}
+
+.password-container input {
+    padding-right: 72px;
+}
+
+.show-password-button {
+    position: absolute;
+
+    top: 50%;
+    right: 10px;
+
+    transform:
+        translateY(-50%);
+
+    padding:
+        7px
+        9px;
+
+    color: #93c5fd;
+
+    font-size: 12px;
+
+    font-weight: bold;
+
+    border:
+        1px solid
+        rgba(59, 130, 246, 0.22);
+
+    border-radius: 9px;
+
+    background:
+        rgba(59, 130, 246, 0.10);
+}
+
+        .login-button {
+            width: 100%;
+
+            margin-top: 16px;
+
+            padding: 15px;
+
+            color: white;
+
+            font-size: 15px;
+
+            font-weight: bold;
+
+            border: none;
+
+            border-radius: 14px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--blue),
+                    var(--purple)
+                );
+
+            box-shadow:
+                0 12px 30px
+                rgba(59, 130, 246, 0.25);
+
+            cursor: pointer;
+        }
+
+        .login-button:disabled {
+            opacity: 0.55;
+
+            cursor: not-allowed;
+        }
+
+        .register-mode-button {
+    width: 100%;
+
+    margin-top: 12px;
+
+    padding: 13px;
+
+    color: #93c5fd;
+
+    font-size: 14px;
+
+    font-weight: bold;
+
+    border:
+        1px solid
+        rgba(59, 130, 246, 0.28);
+
+    border-radius: 14px;
+
+    background:
+        rgba(59, 130, 246, 0.08);
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.register-mode-button:hover {
+    background:
+        rgba(59, 130, 246, 0.16);
+
+    border-color:
+        rgba(59, 130, 246, 0.48);
+}
+
+        .message {
+            display: none;
+
+            margin-top: 15px;
+
+            padding: 12px;
+
+            font-size: 13px;
+
+            line-height: 1.5;
+
+            text-align: center;
+
+            border-radius: 13px;
+        }
+
+        .error-message {
+            color: #fecdd3;
+
+            border:
+                1px solid
+                rgba(251, 113, 133, 0.25);
+
+            background:
+                rgba(251, 113, 133, 0.08);
+        }
+
+        .success-message {
+            color: #a7f3d0;
+
+            border:
+                1px solid
+                rgba(52, 211, 153, 0.25);
+
+            background:
+                rgba(52, 211, 153, 0.08);
+        }
+
+        .server-status {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 8px;
+
+            margin-top: 22px;
+
+            color: #64748b;
+
+            font-size: 12px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+
+            border-radius: 50%;
+
+            background: #64748b;
+        }
+
+        .status-dot.online {
+            background: var(--green);
+
+            box-shadow:
+                0 0 10px
+                rgba(52, 211, 153, 0.8);
+        }
+
+        .status-dot.offline {
+            background: var(--red);
+        }
+
+        .footer {
+            margin-top: 18px;
+
+            color: #475569;
+
+            font-size: 11px;
+
+            text-align: center;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="login-container">
+
+    <div class="login-card">
+
+        <div class="logo">
+            ◆
+        </div>
+
+        <p class="small-title">
+            RESEED Client Portal
+        </p>
+
+        <h1>
+            Welcome Back
+        </h1>
+
+        <p class="description">
+            Enter your registered email address
+            to access your project.
+        </p>
+
+        <form
+                id="loginForm"
+                onsubmit="loginClient(event)"
+        >
+
+            <label for="emailInput">
+                Client Email
+            </label>
+
+            <input
+                    id="emailInput"
+                    type="email"
+                    placeholder="example@email.com"
+                    autocomplete="email"
+                    required
+            >
+            <label
+                    for="passwordInput"
+                    class="password-label"
+            >
+                Password
+            </label>
+
+            <div class="password-container">
+
+                <input
+                        id="passwordInput"
+                        type="password"
+                        placeholder="Enter your password"
+                        autocomplete="current-password"
+                        required
+                >
+
+                <button
+                        id="showPasswordButton"
+                        class="show-password-button"
+                        type="button"
+                        onclick="togglePasswordVisibility()"
+                >
+                    Show
+                </button>
+
+            </div>
+
+            <div
+                    id="confirmPasswordArea"
+                    style="display: none;"
+            >
+                <label
+                        for="confirmPasswordInput"
+                        class="password-label"
+                >
+                    Confirm Password
+                </label>
+
+                <div class="password-container">
+
+                    <input
+                            id="confirmPasswordInput"
+                            type="password"
+                            placeholder="Enter the password again"
+                            autocomplete="new-password"
+                    >
+
+                </div>
+            </div>
+
+            <button
+                    id="loginButton"
+                    class="login-button"
+                    type="submit"
+            >
+                Access My Project
+            </button>
+
+            <button
+                    id="modeButton"
+                    class="register-mode-button"
+                    type="button"
+                    onclick="switchLoginMode()"
+            >
+                Create Client Account
+            </button>
+
+        </form>
+
+        <div
+                id="loginMessage"
+                class="message"
+        ></div>
+
+        <div class="server-status">
+
+            <span
+                    id="serverDot"
+                    class="status-dot"
+            ></span>
+
+            <span id="serverText">
+                Checking Supabase...
+            </span>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script type="module">
+    "use strict";
+
+    import { supabase } from "./supabase-config.js";
+
+    const SAVED_EMAIL_KEY = "nexus_logged_in_email";
+    const PROJECT_CACHE_KEY = "nexus_logged_in_project";
+    const SUPABASE_PROJECT_ID_KEY = "nexus_supabase_project_id";
+
+    const emailInput = document.getElementById("emailInput");
+    const passwordInput = document.getElementById("passwordInput");
+    const confirmPasswordInput = document.getElementById("confirmPasswordInput");
+    const confirmPasswordArea = document.getElementById("confirmPasswordArea");
+    const showPasswordButton = document.getElementById("showPasswordButton");
+    const loginButton = document.getElementById("loginButton");
+    const modeButton = document.getElementById("modeButton");
+    const loginMessage = document.getElementById("loginMessage");
+    const serverDot = document.getElementById("serverDot");
+    const serverText = document.getElementById("serverText");
+
+    let currentMode = "login";
+
+    function normalizeEmail(value) {
+        return String(value || "").trim().toLowerCase();
+    }
+
+    function showMessage(message, type) {
+        loginMessage.textContent = message;
+        loginMessage.className = "message " +
+            (type === "success" ? "success-message" : "error-message");
+        loginMessage.style.display = "block";
+    }
+
+    function hideMessage() {
+        loginMessage.style.display = "none";
+    }
+
+    function showAndroidToast(message) {
+        if (window.AndroidApp && typeof window.AndroidApp.showToast === "function") {
+            window.AndroidApp.showToast(message);
+        }
+    }
+
+    function togglePasswordVisibility() {
+        const passwordIsHidden = passwordInput.type === "password";
+        passwordInput.type = passwordIsHidden ? "text" : "password";
+        confirmPasswordInput.type = passwordIsHidden ? "text" : "password";
+        showPasswordButton.textContent = passwordIsHidden ? "Hide" : "Show";
+    }
+
+    function switchLoginMode() {
+        hideMessage();
+
+        if (currentMode === "login") {
+            currentMode = "register";
+            confirmPasswordArea.style.display = "block";
+            confirmPasswordInput.required = true;
+            loginButton.textContent = "Register Client Account";
+            modeButton.textContent = "Already Registered? Log In";
+            document.querySelector("h1").textContent = "Create Account";
+            document.querySelector(".description").textContent =
+                "Use the same email address registered by your project administrator.";
+            passwordInput.placeholder = "Create a password";
+            passwordInput.autocomplete = "new-password";
+        } else {
+            currentMode = "login";
+            confirmPasswordArea.style.display = "none";
+            confirmPasswordInput.required = false;
+            confirmPasswordInput.value = "";
+            loginButton.textContent = "Access My Project";
+            modeButton.textContent = "Create Client Account";
+            document.querySelector("h1").textContent = "Welcome Back";
+            document.querySelector(".description").textContent =
+                "Enter your registered email address to access your project.";
+            passwordInput.placeholder = "Enter your password";
+            passwordInput.autocomplete = "current-password";
+        }
+    }
+
+    function convertSupabaseProject(row) {
+        return {
+            supabaseId: row.id,
+            id: row.project_id || row.id,
+            clientName: row.client_name || "",
+            clientEmail: row.client_email || "",
+            clientPhone: row.client_phone || "",
+            company: row.company || "",
+            projectTitle: row.project_title || "",
+            dueDate: row.due_date || "",
+            dueTime: row.due_time || "",
+            status: row.status || "New Project",
+            progress: Number(row.progress || 0),
+            valuation: Number(row.valuation || 0),
+            finalValuation: Number(row.final_valuation ?? row.valuation ?? 0),
+            ratePerHour: Number(row.rate_per_hour || 0),
+            hoursUsed: Number(row.hours_used || 0),
+            tasks: Array.isArray(row.tasks) ? row.tasks : [],
+            notes: Array.isArray(row.notes) ? row.notes : [],
+            followUps: Array.isArray(row.follow_ups) ? row.follow_ups : [],
+            files: Array.isArray(row.files) ? row.files : [],
+            paymentReceived: Boolean(row.payment_received),
+            paymentStatus: row.payment_status || "Pending",
+            projectDescription: row.project_description || ""
+        };
+    }
+
+    async function findProjectByEmail(email) {
+        const normalizedEmail = normalizeEmail(email);
+        if (!normalizedEmail) return null;
+
+        const { data, error } = await supabase
+            .from("projects")
+            .select("*")
+            .eq("client_email", normalizedEmail)
+            .order("created_at", { ascending: false })
+            .limit(1)
+            .maybeSingle();
+
+        if (error) throw error;
+        return data ? convertSupabaseProject(data) : null;
+    }
+
+    async function checkServer() {
+        try {
+            const { error } = await supabase.from("projects").select("id").limit(1);
+            if (error && !["PGRST116", "42501"].includes(error.code)) throw error;
+            serverDot.className = "status-dot online";
+            serverText.textContent = "Supabase ready";
+        } catch (error) {
+            console.error("Supabase initialization error:", error);
+            serverDot.className = "status-dot offline";
+            serverText.textContent = "Supabase connection failed";
+        }
+    }
+
+    function saveProjectSession(email, project) {
+        localStorage.setItem(SAVED_EMAIL_KEY, email);
+        localStorage.setItem(SUPABASE_PROJECT_ID_KEY, project.supabaseId);
+        localStorage.setItem(PROJECT_CACHE_KEY, JSON.stringify(project));
+        localStorage.setItem("currentLoggedInEmail", email);
+    }
+
+    function openProject(email) {
+        setTimeout(() => {
+            window.location.href = "./client-project-supabase(1).html?email=" + encodeURIComponent(email);
+        }, 500);
+    }
+
+    async function registerClient(email, password, confirmPassword) {
+        if (password.length < 6) {
+            throw new Error("Password must contain at least 6 characters.");
+        }
+        if (password !== confirmPassword) {
+            throw new Error("The two passwords do not match.");
+        }
+
+        const { data: authData, error: signUpError } = await supabase.auth.signUp({
+            email,
+            password
+        });
+
+        if (signUpError) {
+            if (/already registered|already exists/i.test(signUpError.message)) {
+                throw new Error("This email already has an account. Please log in instead.");
+            }
+            throw signUpError;
+        }
+
+        if (!authData.session) {
+            throw new Error(
+                "Registration created. Please confirm your email, then return here and log in. " +
+                "For instant login, disable Confirm email in Supabase Authentication settings."
+            );
+        }
+
+        const project = await findProjectByEmail(email);
+        if (!project) {
+            await supabase.auth.signOut();
+            throw new Error(
+                "No project was found for this email. Please ask the administrator to register your email first."
+            );
+        }
+
+        const { error: profileError } = await supabase.from("profiles").upsert({
+            id: authData.user.id,
+            name: project.clientName || email.split("@")[0],
+            email,
+            role: "client",
+            updated_at: new Date().toISOString()
+        });
+        if (profileError) console.warn("Profile save warning:", profileError);
+
+        saveProjectSession(email, project);
+        showMessage("Registration successful. Opening your project...", "success");
+        showAndroidToast("Registration successful");
+        openProject(email);
+    }
+
+    async function loginRegisteredClient(email, password) {
+        const { error: signInError } = await supabase.auth.signInWithPassword({
+            email,
+            password
+        });
+
+        if (signInError) {
+            if (/invalid login credentials/i.test(signInError.message)) {
+                throw new Error("Incorrect email or password.");
+            }
+            throw signInError;
+        }
+
+        const project = await findProjectByEmail(email);
+        if (!project) {
+            await supabase.auth.signOut();
+            throw new Error("No project was found for this email.");
+        }
+
+        saveProjectSession(email, project);
+        showMessage("Login successful. Opening your project...", "success");
+        showAndroidToast("Login successful");
+        openProject(email);
+    }
+
+    async function loginClient(event) {
+        event.preventDefault();
+        hideMessage();
+
+        const email = normalizeEmail(emailInput.value);
+        const password = String(passwordInput.value || "");
+        const confirmPassword = String(confirmPasswordInput.value || "");
+
+        if (!email || !password) {
+            showMessage("Please enter your email and password.", "error");
+            return;
+        }
+
+        loginButton.disabled = true;
+        loginButton.textContent = currentMode === "register" ? "Registering..." : "Signing in...";
+
+        try {
+            if (currentMode === "register") {
+                await registerClient(email, password, confirmPassword);
+            } else {
+                await loginRegisteredClient(email, password);
+            }
+        } catch (error) {
+            console.error("Supabase authentication error:", error);
+            showMessage(error.message || "Unable to access your project.", "error");
+            showAndroidToast(error.message || "Login failed");
+        } finally {
+            loginButton.disabled = false;
+            loginButton.textContent = currentMode === "register"
+                ? "Register Client Account"
+                : "Access My Project";
+        }
+    }
+
+    window.loginClient = loginClient;
+    window.switchLoginMode = switchLoginMode;
+    window.togglePasswordVisibility = togglePasswordVisibility;
+
+    checkServer();
+</script>
+
+</body>
+
+</html>
